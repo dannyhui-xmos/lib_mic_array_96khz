@@ -12,7 +12,7 @@
 #include "app_config.h"
 #include "mic_array.h"
 #include "app.h"
-#include "good_2_stage_filter.h"
+#include "custom_filter.h"
 
 #ifndef APP_MIC_IN_COUNT
   #define APP_MIC_IN_COUNT (APP_MIC_COUNT)
@@ -44,31 +44,31 @@ void AudioHwInit()
 void init_mic_conf(mic_array_conf_t &mic_array_conf, mic_array_filter_conf_t (&filter_conf)[2], unsigned *channel_map)
 {
   static int32_t stg1_filter_state[APP_MIC_COUNT][8];
-  static int32_t stg2_filter_state[APP_MIC_COUNT][GOOD_2_STAGE_FILTER_STG2_TAP_COUNT];
+  static int32_t stg2_filter_state[APP_MIC_COUNT][CUSTOM_FILTER_STG2_TAP_COUNT];
   memset(&mic_array_conf, 0, sizeof(mic_array_conf_t));
 
   //decimator
   mic_array_conf.decimator_conf.filter_conf = &filter_conf[0];
   mic_array_conf.decimator_conf.num_filter_stages = 2;
   // filter stage 1
-  filter_conf[0].coef = (int32_t*)good_2_stage_filter_stg1_coef;
-  filter_conf[0].num_taps = GOOD_2_STAGE_FILTER_STG1_TAP_COUNT;
-  filter_conf[0].decimation_factor = GOOD_2_STAGE_FILTER_STG1_DECIMATION_FACTOR;
+  filter_conf[0].coef = (int32_t*)custom_filter_stg1_coef;
+  filter_conf[0].num_taps = CUSTOM_FILTER_STG1_TAP_COUNT;
+  filter_conf[0].decimation_factor = CUSTOM_FILTER_STG1_DECIMATION_FACTOR;
   filter_conf[0].state = (int32_t*)stg1_filter_state;
-  filter_conf[0].shr = GOOD_2_STAGE_FILTER_STG1_SHR;
+  filter_conf[0].shr = CUSTOM_FILTER_STG1_SHR;
   filter_conf[0].state_words_per_channel = filter_conf[0].num_taps/32; // works on 1-bit samples
   // filter stage 2
-  filter_conf[1].coef = (int32_t*)good_2_stage_filter_stg2_coef;
-  filter_conf[1].num_taps = GOOD_2_STAGE_FILTER_STG2_TAP_COUNT;
-  filter_conf[1].decimation_factor = GOOD_2_STAGE_FILTER_STG2_DECIMATION_FACTOR;
+  filter_conf[1].coef = (int32_t*)custom_filter_stg2_coef;
+  filter_conf[1].num_taps = CUSTOM_FILTER_STG2_TAP_COUNT;
+  filter_conf[1].decimation_factor = CUSTOM_FILTER_STG2_DECIMATION_FACTOR;
   filter_conf[1].state = (int32_t*)stg2_filter_state;
-  filter_conf[1].shr = GOOD_2_STAGE_FILTER_STG2_SHR;
-  filter_conf[1].state_words_per_channel = GOOD_2_STAGE_FILTER_STG2_TAP_COUNT;
+  filter_conf[1].shr = CUSTOM_FILTER_STG2_SHR;
+  filter_conf[1].state_words_per_channel = CUSTOM_FILTER_STG2_TAP_COUNT;
 
   // pdm rx
-  static uint32_t pdmrx_out_block[APP_MIC_COUNT][GOOD_2_STAGE_FILTER_STG2_DECIMATION_FACTOR];
-  static uint32_t __attribute__((aligned(8))) pdmrx_out_block_double_buf[2][APP_MIC_COUNT * GOOD_2_STAGE_FILTER_STG2_DECIMATION_FACTOR];
-  mic_array_conf.pdmrx_conf.pdm_out_words_per_channel = GOOD_2_STAGE_FILTER_STG2_DECIMATION_FACTOR;
+  static uint32_t pdmrx_out_block[APP_MIC_COUNT][CUSTOM_FILTER_STG2_DECIMATION_FACTOR];
+  static uint32_t __attribute__((aligned(8))) pdmrx_out_block_double_buf[2][APP_MIC_COUNT * CUSTOM_FILTER_STG2_DECIMATION_FACTOR];
+  mic_array_conf.pdmrx_conf.pdm_out_words_per_channel = CUSTOM_FILTER_STG2_DECIMATION_FACTOR;
   mic_array_conf.pdmrx_conf.pdm_out_block = (uint32_t*)pdmrx_out_block;
   mic_array_conf.pdmrx_conf.pdm_in_double_buf = (uint32_t*)pdmrx_out_block_double_buf;
   mic_array_conf.pdmrx_conf.channel_map = channel_map;

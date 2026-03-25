@@ -18,8 +18,8 @@
 
 #include <math.h>
 
-#if APP_AUDIO_SAMPLE_RATE != 16000
-#error "App sets filters for output sampling rate 16kHz. Compile with APP_AUDIO_SAMPLE_RATE set to 16000
+#if APP_AUDIO_SAMPLE_RATE != 96000
+#error "App sets filters for output sampling rate 96kHz. Compile with APP_AUDIO_SAMPLE_RATE set to 16000
 #endif
 
 #define I2S_CLKBLK    XS1_CLKBLK_3

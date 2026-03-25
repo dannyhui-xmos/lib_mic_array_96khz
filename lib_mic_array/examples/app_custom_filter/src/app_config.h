@@ -4,10 +4,10 @@
 #pragma once
 
 
-#define AUDIO_BUFFER_SAMPLES       ((unsigned) (MIC_ARRAY_CONFIG_SAMPLES_PER_FRAME))
-#define APP_AUDIO_SAMPLE_RATE   16000
+#define AUDIO_BUFFER_SAMPLES        ((unsigned) (MIC_ARRAY_CONFIG_SAMPLES_PER_FRAME))
+#define APP_AUDIO_SAMPLE_RATE       96000
 #define APP_I2S_AUDIO_SAMPLE_RATE   APP_AUDIO_SAMPLE_RATE
-#define MCLK_48                             (512 * 48000)    /* 48kHz family master clock frequency */
+#define MCLK_48                     (512 * 48000)    /* 48kHz family master clock frequency */
 
 #define MASTER_CLOCK_FREQUENCY  MCLK_48
 #define PDM_FREQ                (3072000)

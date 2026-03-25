@@ -136,7 +136,7 @@ int set_enables_and_reset_dac(i2c_cli_t i_i2c, xk_voice_l71_rpi_enable_t enables
 // This must be called on tile[0]
 int dac3101_configure(i2c_cli_t i_i2c, unsigned samFreq, unsigned mclk, xk_voice_l71_dac_pin_t dac_pin)
 {
-    assert((samFreq == 16000) || (samFreq == 48000));
+    assert((samFreq == 16000) || (samFreq == 48000) || (samFreq == 96000));
 
     int error = 0;
 
@@ -148,7 +148,7 @@ int dac3101_configure(i2c_cli_t i_i2c, unsigned samFreq, unsigned mclk, xk_voice
     const unsigned PLLD = 0;
     const unsigned NDAC = 4;
     const unsigned MDAC = (samFreq == 16000) ? 6 : 4;
-    const unsigned DOSR = (samFreq == 16000) ? 256 : 128;
+    const unsigned DOSR = (samFreq == 16000) ? 256 : (samFreq == 48000) ? 128 : 64;
 
     // Set register page to 0
     error |= (I2C_REGOP_SUCCESS != i2c_reg_write(i_i2c, DAC3101_I2C_DEVICE_ADDR, DAC3101_PAGE_CTRL, 0x00));
