@@ -1,5 +1,0 @@
-*.swo
-*.swp
-**/*build*/*
-
-**/bin/*.xe
